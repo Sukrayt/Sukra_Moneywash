@@ -16,10 +16,6 @@ AddEventHandler('esx:playerLoaded', function(xPlayer)
     PlayerData = xPlayer
 end)
 
-RegisterNetEvent('sukra_moneywash:notification')
-AddEventHandler('sukra_moneywash:notification'. function()
-    if configNo
-end)
 --UI
 _menuPool = NativeUI.CreatePool()
 local mainMenu
