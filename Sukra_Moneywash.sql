@@ -1,0 +1,1 @@
+ALTER TABLE `users` ADD COLUMN `black_money_washing` int(11) NOT NULL DEFAULT 0

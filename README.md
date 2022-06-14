@@ -1,2 +1,3 @@
 # Sukra_Moneywash
-Very Simple Moneywash Script for ESX
+Moneywash System for Esx, requires Native UI.
+Join our Discord for Support: https://discord.gg/yWAHqkgURB
