@@ -1,5 +1,5 @@
 if config.UseOldESX then
-    ESX = nil
+    local ESX = nil
 
     TriggerEvent("esx:getSharedObject", function(obj) 
         ESX = obj 
@@ -88,6 +88,17 @@ AddEventHandler('sukra_moneywash:withdrawMoney', function()
            --addexp(v.truckerexp, difficulty)
         end
     end
+       MySQL.Async.execute('UPDATE users SET black_money_washing = @black_money_washing WHERE identifier = @identifier', {
+            ['@identifier'] = xPlayer.identifier,
+            ['@black_money_washing'] = 0,
+          },function(result)
+            if result then
+                print("Database Column cleared succesfully")
+            else
+                print("Error resetting Black Money Value in Database")
+            end
+        end)
+    --end
 end)
 end)
 
