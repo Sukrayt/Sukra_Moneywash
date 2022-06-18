@@ -97,26 +97,27 @@ Citizen.CreateThread(function()
 end
 end)
 
-
 if config.timereminder then
-Citizen.CreateThread(function()
-    Citizen.Wait(1800000)
-    ESX.TriggerServerCallback("sukra:moneywash:gethour", function(hournow) 
-        if hournow == config.hour then
-            for _, playerId in ipairs(GetPlayers()) do
+    Citizen.CreateThread(function()
+        while true do
+            Citizen.Wait(1800000)
+            ESX.TriggerServerCallback("sukra:moneywash:gethour", function(hournow) 
                 ESX.TriggerServerCallback("sukra:moneywash:getmoneyy", function(blackwashmoney) 
-                    if blackwashmoney ~= nil then
-                        if config.customnotify then
-                            notify(Translation[config.Locale]['notification_done'])
-                        else
-                            ESX.ShowNotification(Translation[config.Locale]['notification_done'])
-                        end
-                        
-                    end
-                        
-                end)
+                if hournow == config.hour then
+                        for _, playerId in ipairs(GetPlayers()) do
+                          
+                                if blackwashmoney ~= nil then
+                                    if config.customnotify then
+                                        notify(Translation[config.Locale]['notification_done'])
+                                    else
+                                        ESX.ShowNotification(Translation[config.Locale]['notification_done'])
+                                    end
+                                end
+                         
+                end
             end
+        end)
     end)
-
-end)
+        end
+    end)
 end
