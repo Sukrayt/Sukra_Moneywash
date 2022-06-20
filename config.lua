@@ -1,20 +1,18 @@
-config = {}     --dont touch
+Config = {}     --dont touch
 Translation = {}       --dont touch
 
-config.Locale = 'en'    --en or de feel free to add more and PR it on GitHub
-config.hour = 15
-config.MoneywashLocation = vector3(2434.7, 4968.66, 41.35)    --this is the position where the Marker will draw
-config.timereminder = true -- reminds people who washed money that they cant get their money if config.hour matches the hour (every 30 min once)
-config.customnnotification = false -- if false then esx.shownotification will be used ;)
+Config.Locale = 'en'    --en or de feel free to add more and PR it on GitHub
+Config.Hour = 15
+Config.MoneywashLocation = {
+    vector3(2434.7, 4968.66, 41.35),
+}
+Config.Reminder = true -- reminds people who washed money that they cant get their money if config.hour matches the hour (every 30 min once)
+Config.ESXNotify = true -- if true uses ESX.ShowNotification()
 function notify(txt) -- use your notify here, and input everything except the text, input txt where your text should be.
 end 
-config.UseOldESX = false  --enable this if you are using Esx V1 Final or 1.2 Anything below 1.2 will not work you should not use these old versions anyways remember to change your fxmanifest.lua if enabled
-config.MYSQL = 'oxmysql'  --either oxmysql or mysql-async, if you use mysql-async you have to change the path in fxmanifest.lua
+Config.OldESX = false  --enable this if you are using Esx V1 Final or 1.2 Anything below 1.2 will not work you should not use these old versions 
+Config.Percent = 50
 
-
-config.Percent = 50
-
---config.MoneyTime = 15 0 0  --this determines when the Black Money will be washed
 
 Translation = {         --Add more under en if you want to Translate the Script
     ['en'] = {
