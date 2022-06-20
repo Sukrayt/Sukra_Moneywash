@@ -10,7 +10,7 @@ Config.Reminder = true -- reminds people who washed money that they cant get the
 Config.ESXNotify = true -- if true uses ESX.ShowNotification()
 function notify(txt) -- use your notify here, and input everything except the text, input txt where your text should be.
 end 
-Config.UseOldESX = false  --enable this if you are using Esx V1 Final or 1.2 Anything below 1.2 will not work you should not use these old versions 
+Config.OldESX = false  --enable this if you are using Esx V1 Final or 1.2 Anything below 1.2 will not work you should not use these old versions 
 Config.Percent = 50
 
 
