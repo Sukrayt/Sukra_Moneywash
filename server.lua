@@ -37,6 +37,8 @@ ESX.RegisterServerCallback('sukra:moneywash:getCurrentWashMoney', function(sourc
     local xPlayer = ESX.GetPlayerFromId(source)
     if MoneyWashing and MoneyWashing[xPlayer.identifier] then         
             cb(MoneyWashing[xPlayer.identifier])
+    else
+            cb(0)
     end
 end)
 
