@@ -1,8 +1,6 @@
 local ESX = nil
-if config.UseOldESX then
+if Config.OldESX then
     Citizen.CreateThread(function()
-        ESX = nil
-       
         while ESX == nil do
            TriggerEvent("esx:getSharedObject", function(obj) ESX = obj end)
           Citizen.Wait(0)
@@ -20,44 +18,39 @@ local round = function(num, numDecimalPlaces)
 	local mult = 10^(numDecimalPlaces or 0)
 	return math.floor(num * mult + 0.5) / mult
 end
-function openMenu()
-    local blackwashmoney = 0
-    local bb = 0
-    local hournow = 0
-    ESX.TriggerServerCallback("sukra:moneywash:getmoneyy", function(blackwashmoney) 
-        ESX.TriggerServerCallback("sukra:moneywash:getmoney1", function(bb) 
-            ESX.TriggerServerCallback("sukra:moneywash:gethour", function(hournow) 
-    		mainMenu = NativeUI.CreateMenu(Translation[config.Locale]['menu_title'], "")
-    		_menuPool:Add(mainMenu)
-    
 
-    		if bb == nil then
-        		bb = 0
-    		end
-    		local get_money = NativeUI.CreateItem(Translation[config.Locale]['get_wash_money_title'], "")
+local notify = function(txt)
+	-- CUSTOM NOTIFICATION
+end
+
+local openMenu = function()
+    ESX.TriggerServerCallback("sukra:moneywash:getCurrentWashMoney", function(currentWashMoney) 
+        ESX.TriggerServerCallback("sukra:moneywash:getPlayerBlackMoney", function(ply_money) 
+            ESX.TriggerServerCallback("sukra:moneywash:gethour", function(hournow) 
+    		mainMenu = NativeUI.CreateMenu(Translation[Config.Locale]['menu_title'], "")
+    		_menuPool:Add(mainMenu)
+    		local get_money = NativeUI.CreateItem(Translation[Config.Locale]['get_wash_money_title'], "")
     		mainMenu:AddItem(get_money)
-    		local wash_money = NativeUI.CreateItem(Translation[config.Locale]['menu_wash_money_title'], Translation[config.Locale]['menu_wash_money_desc'] .. tostring(bb))
+    		local wash_money = NativeUI.CreateItem(Translation[Config.Locale]['menu_wash_money_title'], Translation[Config.Locale]['menu_wash_money_desc'] .. tostring(ply_money))
     		mainMenu:AddItem(wash_money)
-    		if hournow == config.hour and blackwashmoney ~= 0 then
+    		if hournow == Config.Hour and currentWashMoney ~= 0 then
     			get_money:Enabled(true)
     		else
         		get_money:Enabled(false)
     		end
-    		local see_money = NativeUI.CreateItem(Translation[config.Locale]['menu_money_title'], Translation[config.Locale]['menu_money_desc'] .. tostring(blackwashmoney))
+    		local see_money = NativeUI.CreateItem(Translation[Config.Locale]['menu_money_title'], Translation[Config.Locale]['menu_money_desc'] .. tostring(ply_money))
     		mainMenu:AddItem(see_money)
     		see_money:Enabled(false)
     		mainMenu.OnItemSelect = function(sender, item, index)
 			if item == wash_money then                          --probably not the best method
-            			TriggerServerEvent('sukra_moneywash:depositMoney', black_money_percent)
-            			TriggerServerEvent("sukra_moneywash:withdrawMoney", source)
+            			TriggerServerEvent('sukra_moneywash:depositMoney')
             			mainMenu:Visible(false)
         		elseif item == get_money then
-            			TriggerServerEvent("sukra_moneywash:withdrawMoney", source)
-            			ESX.ShowNotification(Translation[config.Locale]['wash_succesfull'])
+            			TriggerServerEvent("sukra_moneywash:withdrawMoney")
+            			ESX.ShowNotification(Translation[Config.Locale]['wash_succesfull'])
             			mainMenu:Visible(false)
     			end
 		end
-    --the following disables Mouse Control and prevents the Camera from spinning when the Menu is open
     		mainMenu:Visible(true)
     		_menuPool:RefreshIndex()
     		_menuPool:MouseControlsEnabled (false)
@@ -76,9 +69,9 @@ Citizen.CreateThread(function()
 	if dist < 10.0 then
 		sleep = 0
 		_menuPool:ProcessMenus()
-        	DrawMarker(27, config.MoneywashLocation, 0, 0, 0, 0, 0, 0, 1.001, 1.0001, 0.5001, 0, 255, 50, 200, 0, 0, 0, 0)
+        	DrawMarker(27, Config.MoneywashLocation, 0, 0, 0, 0, 0, 0, 1.001, 1.0001, 0.5001, 0, 255, 50, 200, 0, 0, 0, 0)
         	if dist < 1.0 then
-            		ESX.ShowHelpNotification(Translation[config.Locale]['wash_money'])
+            		ESX.ShowHelpNotification(Translation[Config.Locale]['wash_money'])
             		if IsControlJustReleased(0, 38) then
                 		openMenu()
             		end
@@ -87,23 +80,21 @@ Citizen.CreateThread(function()
 	Citizen.Wait(sleep)
 end)
 
-if config.timereminder then
+if Config.Reminder then
     Citizen.CreateThread(function()
         while true do
             Citizen.Wait(1800000)
-            ESX.TriggerServerCallback("sukra:moneywash:gethour", function(hournow) 
-                ESX.TriggerServerCallback("sukra:moneywash:getmoneyy", function(blackwashmoney) 
-                if hournow == config.hour then
-                       for _, playerId in ipairs(GetPlayers()) do
-                                if blackwashmoney ~= nil then
-                                    if config.customnotify then
-                                        notify(Translation[config.Locale]['notification_done'])
-                                    else
-                                        ESX.ShowNotification(Translation[config.Locale]['notification_done'])
-                                    end
-                                end
-                	end
-            	end
+            ESX.TriggerServerCallback("sukra:moneywash:gethour", function(currentHour) 
+                ESX.TriggerServerCallback("sukra:moneywash:getCurrentWashMoney", function(currentWashMoney) 
+                	if currentHour == Config.hour then
+				if currentWashMoney ~= nil then
+					if Config.ESXNotify then
+						ESX.ShowNotification(Translation[Config.Locale]['notification_done'])
+					else
+						notify(Translation[Config.Locale]['notification_done'])
+					end
+				end
+            		end
         	end)
     	    end)
         end
